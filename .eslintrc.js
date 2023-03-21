@@ -18,5 +18,6 @@ module.exports = {
     semi: ['error', 'never'],
     'arrow-spacing': ['error', { before: true, after: true }],
     'object-curly-spacing': ['error', 'always'],
+    'react/prop-types': [0]
   },
 }
