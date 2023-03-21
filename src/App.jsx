@@ -1,37 +1,18 @@
 import React from 'react'
-import Directory from './components/directory/directory.component'
-
-const categories = [
-  {
-    id: 1,
-    title: 'hats',
-    imageUrl: 'https://i.ibb.co/cvpntL1/hats.png',
-  },
-  {
-    id: 2,
-    title: 'jackets',
-    imageUrl: 'https://i.ibb.co/px2tCc3/jackets.png',
-  },
-  {
-    id: 3,
-    title: 'sneakers',
-    imageUrl: 'https://i.ibb.co/0jqHpnp/sneakers.png',
-  },
-  {
-    id: 4,
-    title: 'women',
-    imageUrl: 'https://i.ibb.co/GCCdy8t/womens.png',
-  },
-  {
-    id: 5,
-    title: 'men',
-    imageUrl: 'https://i.ibb.co/R70vBrQ/men.png',
-  },
-]
+import Home from './routes/home/home.component'
+import Navigation from './routes/navigation/navigation.component'
+import { Routes, Route } from 'react-router-dom'
 
 function App() {
   return (
-    <Directory categories={categories}/>
+    <Routes>
+      {/* The Route component is used to specify a match between a location's URL and some UI to render. */}
+      <Route path='/' element={<Navigation />}>
+        {/* Here we are setting the index page to render the Home component when the URL path is '/'. */}
+        <Route index element={<Home />}></Route>
+        <Route path='shop' element={<h1>Shop</h1>}></Route>
+      </Route>
+    </Routes>
   )
 }
 
