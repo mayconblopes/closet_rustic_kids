@@ -5,7 +5,6 @@ import {
 } from '../utils/firebase/firebase.utils'
 
 export const UserContext = createContext({
-  currentUser: null,
   setCurrentUser: () => null,
 })
 
@@ -17,7 +16,6 @@ export function UserProvider({ children }) {
     const unsubscribe = onAuthStateChangedListener((user) => {
       if (user) createUserDocumentFromAuth(user)
       setCurrentUser(user)
-      console.log(user)
     })
 
     return unsubscribe
