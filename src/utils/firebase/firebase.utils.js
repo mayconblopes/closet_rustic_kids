@@ -16,7 +16,9 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
 } from 'firebase/auth'
 
 import {
@@ -97,4 +99,12 @@ export const createAuthUserWithEmailAndPassword = async (email, password) => {
 
 export function signInUserWithEmailAndPassword(email, password){
   return signInWithEmailAndPassword(auth, email, password)
+}
+
+export async function signOutUser() {
+  await signOut(auth)
+}
+
+export function onAuthStateChangedListener(callback) {
+  onAuthStateChanged(auth, callback)
 }
