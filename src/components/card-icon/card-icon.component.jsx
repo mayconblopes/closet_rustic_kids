@@ -13,7 +13,7 @@ export default function CartIcon() {
   return (
     <div className='cart-icon-container'>
       <ShoppingIcon className='shopping-icon' onClick={toggleIsCartOpen} />
-      <span className='item-count'>10</span>
+      <span className='item-count' onClick={toggleIsCartOpen}>{context.cartCount}</span>
     </div>
   )
 }
