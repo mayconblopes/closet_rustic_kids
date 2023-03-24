@@ -18,7 +18,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
 } from 'firebase/auth'
 
 import {
@@ -97,7 +97,7 @@ export const createAuthUserWithEmailAndPassword = async (email, password) => {
   else return await createUserWithEmailAndPassword(auth, email, password)
 }
 
-export function signInUserWithEmailAndPassword(email, password){
+export function signInUserWithEmailAndPassword(email, password) {
   return signInWithEmailAndPassword(auth, email, password)
 }
 
@@ -106,5 +106,9 @@ export async function signOutUser() {
 }
 
 export function onAuthStateChangedListener(callback) {
+  /* This code registers a callback function to be executed whenever the authentication state changes.
+  The 'auth' parameter is an object representing the current user's authentication status.
+  The 'callback' parameter is the function to be executed when the authentication state changes.
+  onAuthStateChanged passes the user as a parameter for the callback function */
   onAuthStateChanged(auth, callback)
 }

@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react'
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
@@ -8,7 +8,6 @@ import {
 import Button from '../button/button.component'
 import FormInput from '../form-input/form-input.component'
 
-import { UserContext } from '../../contexts/user.context'
 
 import './sign-up-form.styles.scss'
 
@@ -21,8 +20,6 @@ const defaultFormFields = {
 
 function SignUpForm() {
   const [formFields, setFormFields] = useState(defaultFormFields)
-
-  const context = useContext(UserContext)
 
   function handleChange(event) {
     setFormFields({ ...formFields, [event.target.name]: event.target.value })
@@ -43,8 +40,6 @@ function SignUpForm() {
           formFields.email,
           formFields.password
         )
-
-        context.setCurrentUser(response.user)
 
         await createUserDocumentFromAuth(response.user, {
           displayName: formFields.displayName,
