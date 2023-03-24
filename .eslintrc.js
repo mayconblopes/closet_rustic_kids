@@ -12,12 +12,16 @@ module.exports = {
   },
   plugins: ['react'],
   rules: {
-    indent: ['warn', 2, { 'SwitchCase': 1 }],
+    indent: ['warn', 2, { SwitchCase: 1 }],
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single'],
     semi: ['error', 'never'],
+    'no-unused-vars': [
+      'warn',
+      { vars: 'all', args: 'after-used', ignoreRestSiblings: false },
+    ],
     'arrow-spacing': ['error', { before: true, after: true }],
     'object-curly-spacing': ['error', 'always'],
-    'react/prop-types': [0]
+    'react/prop-types': [0],
   },
 }
