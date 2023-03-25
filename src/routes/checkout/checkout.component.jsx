@@ -31,7 +31,7 @@ export default function Checkout() {
       {cartContext.cartItems.map((item) => (
         <CheckoutItem key={item.id} cartItem={item} />
       ))}
-      <span className='total'>Total: 0</span>
+      <span className='total'>Total: ${cartContext.cartTotal}</span>
     </div>
   )
 }
