@@ -28,6 +28,10 @@ import {
   setDoc,
   // eslint-disable-next-line no-unused-vars
   Firestore, // This function is used to write or update a document in the Cloud Firestore database with new data.
+  collection, // collection() function provides reference to a Firestore collection.
+  writeBatch, // writeBatch() function is used to performs multiple writes on documents in the same collection.
+  query, // query(): This function creates a Query object for the specified collection or collection group.
+  getDocs, // getDocs(): This function retrieves all the documents that meet the conditions specified by the Query object.
 } from 'firebase/firestore'
 
 // web app's Firebase configuration
@@ -55,6 +59,49 @@ export const signInWithGoogleRedirect = () =>
   signInWithRedirect(auth, googleProvider)
 
 export const db = getFirestore()
+
+export async function addCollectionAndDocuments(collectionKey, objectsToAdd) {
+  // gets the collection of documents matching the collectionKey
+  const collectionRef = collection(db, collectionKey)
+  const batch = writeBatch(db)
+
+  // objectsToAdd are the products on shopdata.js
+  objectsToAdd.forEach((object) => {
+    const docRef = doc(collectionRef, object.title.toLowerCase())
+    batch.set(docRef, object)
+  })
+
+  await batch.commit()
+  console.log('bacth done')
+}
+
+export async function getCategoriesAndDocuments() {
+  const collectionRef = collection(db, 'categories')
+  const q = query(collectionRef)
+
+  const querySnapshot = await getDocs(q)
+  const categoryMap = querySnapshot.docs.reduce((accumulator, docSnapshot) => {
+    const { title, items } = docSnapshot.data()
+    accumulator[title.toLowerCase()] = items
+    return accumulator
+  }, {})
+
+  return categoryMap
+  /*
+  The above reduce() will return a single object like this 
+  {
+    hats: [
+      {},
+      {}.
+    ]
+  sneakers: [
+    {},
+    {}
+  ]
+  and so on ....
+}
+*/
+}
 
 export const createUserDocumentFromAuth = async (
   userAuth,
