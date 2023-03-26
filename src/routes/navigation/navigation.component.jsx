@@ -9,7 +9,7 @@ import { CartContext } from '../../contexts/cart.context'
 
 import { signOutUser } from '../../utils/firebase/firebase.utils'
 
-import './navigation.styles.scss'
+import { LogoContainerStyle, NavigationContainerStyle, NavLinksStyle, NavLinkStyle } from './navigation.styles'
 
 function Navigation() {
   const userContext = useContext(UserContext)
@@ -17,30 +17,31 @@ function Navigation() {
 
   return (
     <Fragment>
-      <div className='navigation'>
-        <Link className='logo-container' to='/'>
+      <NavigationContainerStyle>
+        <LogoContainerStyle to='/'>
           <Logo className='logo' />
-        </Link>
-        <div className='nav-links-container'>
-          <Link className='nav-link' to='/shop'>
+        </LogoContainerStyle>
+
+        <NavLinksStyle>
+          <NavLinkStyle to='/shop'>
             SHOP
-          </Link>
+          </NavLinkStyle>
 
           {userContext.currentUser ? (
-            <span className='nav-link' onClick={signOutUser}>
+            <NavLinkStyle as='span' onClick={signOutUser}>
               SIGN OUT
-            </span>
+            </NavLinkStyle>
           ) : (
-            <Link className='nav-link' to='/auth'>
+            <NavLinkStyle to='/auth'>
               SIGN IN
-            </Link>
+            </NavLinkStyle>
           )}
           <CartIcon />
-        </div>
+        </NavLinksStyle>
         {cartContext.isCartOpen && 
           <CartDropdown />
         }
-      </div>
+      </NavigationContainerStyle>
       {/* The Outlet component is used here to render child routes. */}
       {/* This element will be replaced with the appropriate route based on the current URL pathname. */}
       <Outlet />
