@@ -13,7 +13,7 @@ function App() {
       <Route path='/' element={<Navigation />}>
         {/* Here we are setting the index page to render the Home component when the URL path is '/'. */}
         <Route index element={<Home />}></Route>
-        <Route path='shop' element={<Shop />}></Route>
+        <Route path='shop/*' element={<Shop />}></Route>
         <Route path='auth' element={<Authentication />}></Route>
         <Route path='checkout' element={<Checkout />}></Route>
       </Route>
