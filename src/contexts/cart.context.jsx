@@ -52,9 +52,11 @@ export function CartProvider({ children }) {
   const [cartTotal, setCartTotal] = useState(0)
 
   function calcCartTotal() {
-    const total = cartItems.reduce((accumulator, cartItem) => {
-      cartItem.quantity * cartItem.price + accumulator, 0
-    })
+    let total = 0
+    total = cartItems.reduce(
+      (accumulator, cartItem) =>
+        cartItem.quantity * cartItem.price + accumulator, 0
+    )
     return total
   }
 
