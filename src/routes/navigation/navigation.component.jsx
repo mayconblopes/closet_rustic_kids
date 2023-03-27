@@ -29,8 +29,9 @@ function Navigation() {
 
           {userContext.currentUser ? (
             <NavLinkStyle as='span' onClick={signOutUser}>
-              SIGN OUT
+              SIGN OUT ({userContext.currentUser.email})
             </NavLinkStyle>
+
           ) : (
             <NavLinkStyle to='/auth'>
               SIGN IN
