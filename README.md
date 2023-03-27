@@ -1,6 +1,6 @@
 # About this project
 
-This project is an ecommerce website built as a conceptual site for studying purposes. It has many key concepts, such as components, hooks, routes, authentication, Firebase, styled-components, deployment processes, and much more in ReactJS, JavaScript, and CSS.
+This project is an ecommerce website built as a conceptual site for studying purposes. It has many key concepts, such as components, hooks, routes, authentication, Firebase, styled-components, deploy, and a lot about ReactJS, JavaScript and CSS.
 
 The backend is supplied by Firebase, and the frontend has authentication, route, and cart functionalities.
 
