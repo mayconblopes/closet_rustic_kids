@@ -10,12 +10,15 @@ export const NavigationContainerStyle = styled.div`
 `
 
 export const LogoContainerStyle = styled(Link)`
-  height: 100%;
-  width: 70px;
-  padding: 25px;
+
+img {
+    height: 100%;
+    padding: 5px;
+    width: 80px;
+  }
 `
 export const NavLinksStyle = styled.div`
-  width: 50%;
+  width: 70%;
   height: 100%;
   display: flex;
   align-items: center;

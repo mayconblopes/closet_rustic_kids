@@ -12,7 +12,7 @@ export default function FormInput({ label, ...otherProps }) {
       <InputStyle {...otherProps} />
 
       {label && (
-        <FormInputLabelStyle shrink={otherProps.value.length}>
+        <FormInputLabelStyle shrink={otherProps.value?.length}>
           {label}
         </FormInputLabelStyle>
       )}

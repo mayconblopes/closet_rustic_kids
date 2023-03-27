@@ -16,7 +16,6 @@ function DirectoryItem({ category, route }) {
       <BackgroundImageStyle imageUrl={category.imageUrl}/>
       <BodyStyle>
         <h2>{category.title}</h2>
-        <p>Shop Now</p>
       </BodyStyle>
     </DirectoryItemContainerStyle>
   )

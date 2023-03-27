@@ -34,14 +34,15 @@ import {
   getDocs, // getDocs(): This function retrieves all the documents that meet the conditions specified by the Query object.
 } from 'firebase/firestore'
 
+
 // web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyBBJTj7wkGcsDMwlUYkn0egw0P58F6EnoA',
-  authDomain: 'closet-rustic-kids-db.firebaseapp.com',
-  projectId: 'closet-rustic-kids-db',
-  storageBucket: 'closet-rustic-kids-db.appspot.com',
-  messagingSenderId: '906394988777',
-  appId: '1:906394988777:web:571e5df5390b2dbb03c078',
+  apiKey: 'AIzaSyCAaTYUvJLacZSQ2Lt9S8uQq46oxL4bVw8',
+  authDomain: 'bfmm-2dcaa.firebaseapp.com',
+  projectId: 'bfmm-2dcaa',
+  storageBucket: 'bfmm-2dcaa.appspot.com',
+  messagingSenderId: '178507598749',
+  appId: '1:178507598749:web:186e5e1266b3b061333d74',
 }
 
 // Initialize Firebase
@@ -76,6 +77,7 @@ export async function addCollectionAndDocuments(collectionKey, objectsToAdd) {
 }
 
 export async function getCategoriesAndDocuments() {
+  // const collectionRef = collection(db, 'categories')
   const collectionRef = collection(db, 'categories')
   const q = query(collectionRef)
 
