@@ -4,13 +4,17 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['eslint:recommended', 'plugin:react/recommended'],
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
+  ],
   overrides: [],
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['react'],
+  plugins: ['react', 'react-hooks'],
   rules: {
     indent: ['warn', 2, { SwitchCase: 1 }],
     'linebreak-style': ['error', 'unix'],
@@ -23,5 +27,7 @@ module.exports = {
     'arrow-spacing': ['error', { before: true, after: true }],
     'object-curly-spacing': ['error', 'always'],
     'react/prop-types': [0],
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'error',
   },
 }

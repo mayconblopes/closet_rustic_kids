@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from 'react'
-import { Outlet, Link } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import Logo from '../../assets/mmbflogo.png'
 import CartIcon from '../../components/card-icon/card-icon.component'
 import CartDropdown from '../../components/cart-dropdown/cart-dropdown.component'
@@ -17,8 +17,9 @@ import {
 } from './navigation.styles'
 
 function Navigation() {
-  const userContext = useContext(UserContext)
+  const { currentUser } = useContext(UserContext)
   const cartContext = useContext(CartContext)
+  const navigate = useNavigate()
 
   return (
     <Fragment>
@@ -28,15 +29,21 @@ function Navigation() {
         </LogoContainerStyle>
 
         <NavLinksStyle>
-          {!userContext.currentUser ? (
+          {!currentUser ? (
             <NavLinkStyle to='/shop'>SHOP</NavLinkStyle>
           ) : (
             <NavLinkStyle to='/admin'>ADM PANEL</NavLinkStyle>
           )}
 
-          {userContext.currentUser ? (
-            <NavLinkStyle as='span' onClick={signOutUser}>
-              SIGN OUT ({userContext.currentUser.email})
+          {currentUser ? (
+            <NavLinkStyle
+              as='span'
+              onClick={() => {
+                signOutUser()
+                navigate('/')
+              }}
+            >
+              SIGN OUT ({currentUser.email})
             </NavLinkStyle>
           ) : (
             <NavLinkStyle to='/auth'>ADMIN</NavLinkStyle>

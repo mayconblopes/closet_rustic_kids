@@ -1,7 +1,8 @@
 import React, { Fragment, useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { UserContext } from '../../contexts/user.context'
-import CreateComponent from './crud-components/create-component'
+import CreatorComponent from './crud-components/creator-component'
+import ReaderComponent from './crud-components/reader-component'
 
 export default function AdminPanel() {
   const userContext = useContext(UserContext)
@@ -11,10 +12,10 @@ export default function AdminPanel() {
     return (
       <Fragment>
         <h1>Admin Panel</h1>
-        <CreateComponent />
+        <CreatorComponent />
+        <hr />
+        <ReaderComponent/>
       </Fragment>
     )
-  } else {
-    useEffect(() => navigate('/auth'), [])
   }
 }

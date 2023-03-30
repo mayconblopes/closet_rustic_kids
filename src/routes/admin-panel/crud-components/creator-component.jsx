@@ -1,13 +1,21 @@
-import React, { useState } from 'react'
+// import SHOP_DATA from './../../../shopdata.js'
+import React, { useContext, useState } from 'react'
 import Button from '../../../components/button/button.component'
 import FormInput from '../../../components/form-input/form-input.component'
-import { addCollectionAndDocuments } from '../../../utils/firebase/firebase.utils'
+import {
+  addCollectionAndDocuments,
+  createProduct,
+} from '../../../utils/firebase/firebase.utils'
+import { CategoriesContext } from '../../../contexts/categories.context.jsx'
+import { useNavigate } from 'react-router-dom'
 
-export default function CreateComponent() {
+export default function CreatorComponent() {
   const [productName, setProductName] = useState('')
   const [productImageUrl, setProductImageUrl] = useState('')
   const [productPrice, setProductPrice] = useState('')
   const [productCategory, setProductCategory] = useState('')
+  const { categoriesMap } = useContext(CategoriesContext)
+  const navigate = useNavigate()
 
   function handleInput(event) {
     switch (event.target.name) {
@@ -39,22 +47,23 @@ export default function CreateComponent() {
 
   function saveProduct(event) {
     event.preventDefault()
+    // addCollectionAndDocuments('categories', SHOP_DATA)
 
-    addCollectionAndDocuments('categories', [
-      {
-        title: productCategory,
-        items: {
-          name: productName,
-          price: productPrice,
-          imageUrl: productImageUrl,
-        },
-      },
-    ])
+    const objectToAdd = {
+      name: productName,
+      price: productPrice,
+      imageUrl: productImageUrl,
+    }
+
+    createProduct(categoriesMap, productCategory, objectToAdd)
+    navigate('/admin')
+    
+
+ 
   }
 
   return (
     <div className='sign-up-container'>
-
       <form>
         <h2>Cadastro de produto</h2>
 

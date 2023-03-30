@@ -1,3 +1,4 @@
+import { v4 as uuid4 } from 'uuid'
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app'
 // TODO: Add SDKs for Firebase products that you want to use
@@ -33,7 +34,6 @@ import {
   query, // query(): This function creates a Query object for the specified collection or collection group.
   getDocs, // getDocs(): This function retrieves all the documents that meet the conditions specified by the Query object.
 } from 'firebase/firestore'
-
 
 // web app's Firebase configuration
 const firebaseConfig = {
@@ -77,7 +77,6 @@ export async function addCollectionAndDocuments(collectionKey, objectsToAdd) {
 }
 
 export async function getCategoriesAndDocuments() {
-  // const collectionRef = collection(db, 'categories')
   const collectionRef = collection(db, 'categories')
   const q = query(collectionRef)
 
@@ -105,6 +104,40 @@ export async function getCategoriesAndDocuments() {
 */
 }
 
+export async function createProduct(categoriesMap, category, objectsToAdd) {
+  objectsToAdd.id = uuid4()
+  categoriesMap[category].push(objectsToAdd)
+  const collectionRef = collection(db, 'categories')
+
+  const docRef = doc(collectionRef, category)
+  await setDoc(docRef, { title: category, items: categoriesMap[category] })
+}
+
+export async function deleteProduct(categoriesMap, objectToDelete, category) {
+  const items = categoriesMap[category].filter(
+    (item) => item.id !== objectToDelete.id
+  )
+  const collectionRef = collection(db, 'categories')
+  const docRef = doc(collectionRef, category)
+  await setDoc(docRef, { title: category, items: items })
+
+  return getCategoriesAndDocuments()
+}
+
+export async function updateProduct(categoriesMap, objectToUpdate, category) {
+  const items = categoriesMap[category].filter(
+    (item) => item.id !== objectToUpdate.id
+  )
+  console.log('ANTES',items)
+  items.push(objectToUpdate)
+  console.log('DEPOIS',items)
+  const collectionRef = collection(db, 'categories')
+  const docRef = doc(collectionRef, category)
+  await setDoc(docRef, { title: category, items: items })
+
+  return getCategoriesAndDocuments()
+}
+
 export const createUserDocumentFromAuth = async (
   userAuth,
   additionalInformation = {}
@@ -114,11 +147,8 @@ export const createUserDocumentFromAuth = async (
     2 A string indicating the collection in which the user document will be stored ('users')
     3 A string that represents the ID of the user document, which is generated from the user's UID (userAuth.uid)*/
   const userDocRef = doc(db, 'users', userAuth.uid)
-  console.log(userDocRef)
 
   const userSnapshot = await getDoc(userDocRef)
-  console.log(userSnapshot)
-  console.log(userSnapshot.exists())
 
   //This function checks if there is data in database
   if (!userSnapshot.exists()) {
