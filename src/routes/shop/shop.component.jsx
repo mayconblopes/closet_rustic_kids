@@ -1,11 +1,25 @@
-import React, { useContext } from 'react'
+import React, { useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import { CategoriesContext } from '../../contexts/categories.context'
+import { useDispatch } from 'react-redux'
+
 import CategoriesPreview from '../categories-preview/categories-preview.component'
 import Category from '../category/category.component'
+import { getCategoriesAndDocuments } from '../../utils/firebase/firebase.utils'
+import { setCategories } from '../../store/categories/category.actions'
 
 export default function Shop() {
-  const context = useContext(CategoriesContext)
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    async function getCategoriesMap() {
+      const categoriesArray = await getCategoriesAndDocuments()
+      console.log(categoriesArray)
+      dispatch(setCategories(categoriesArray))
+    }
+
+    getCategoriesMap()
+  }, [])
 
   return (
     <Routes>
