@@ -1,45 +1,48 @@
-import React from 'react'
-import { useContext } from 'react'
-import { CartContext } from '../../contexts/cart.context'
-import './checkout-item.styles.scss'
+import { useSelector, useDispatch } from 'react-redux';
 
-export default function CheckoutItem({ cartItem }) {
-  const cartContext = useContext(CartContext)
+import { selectCartItems } from '../../store/cart/cart.selector';
+import {
+  addItemToCart,
+  clearItemFromCart,
+  removeItemFromCart,
+} from '../../store/cart/cart.action';
 
-  function addItemToCart() {
-    cartContext.addItemToCart(cartItem)
-  }
+import {
+  CheckoutItemContainer,
+  ImageContainer,
+  BaseSpan,
+  Quantity,
+  Arrow,
+  Value,
+  RemoveButton,
+} from './checkout-item.styles';
 
-  function removeItemFromCart() {
-    cartContext.removeItemFromCart(cartItem)
-  }
+const CheckoutItem = ({ cartItem }) => {
+  const { name, imageUrl, price, quantity } = cartItem;
+  const cartItems = useSelector(selectCartItems);
+  const dispatch = useDispatch();
 
-  function clearItemFromCart() {
-    cartContext.clearItemFromCart(cartItem)
-  }
+  const clearItemHandler = () =>
+    dispatch(clearItemFromCart(cartItems, cartItem));
+  const addItemHandler = () => dispatch(addItemToCart(cartItems, cartItem));
+  const removeItemHandler = () =>
+    dispatch(removeItemFromCart(cartItems, cartItem));
 
   return (
-    <div className='checkout-item-container'>
-      <div className='image-container'>
-        <img src={cartItem.imageUrl} alt={cartItem.name} />
-      </div>
-      <span className='name'>{cartItem.name}</span>
+    <CheckoutItemContainer>
+      <ImageContainer>
+        <img src={imageUrl} alt={`${name}`} />
+      </ImageContainer>
+      <BaseSpan> {name} </BaseSpan>
+      <Quantity>
+        <Arrow onClick={removeItemHandler}>&#10094;</Arrow>
+        <Value>{quantity}</Value>
+        <Arrow onClick={addItemHandler}>&#10095;</Arrow>
+      </Quantity>
+      <BaseSpan> {price}</BaseSpan>
+      <RemoveButton onClick={clearItemHandler}>&#10005;</RemoveButton>
+    </CheckoutItemContainer>
+  );
+};
 
-      <span className='quantity'>
-        <div className='arrow' onClick={removeItemFromCart}>
-          &#10094; {/* left arrow "<"*/}
-        </div>
-        <div className='value'>{cartItem.quantity}</div>
-        <div className='arrow' onClick={addItemToCart}>
-          &#10095; {/* right arrow ">"*/}
-        </div>
-      </span>
-
-      <span className='price'>{cartItem.price}</span>
-
-      <div className='remove-button' onClick={clearItemFromCart}>
-        &#10005;
-      </div>
-    </div>
-  )
-}
+export default CheckoutItem;

@@ -1,17 +1,6 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from 'firebase/app'
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { initializeApp } from 'firebase/app';
 import {
-  /*
-  The getAuth() function retrieves the authentication instance for the default app or a given app and can be used to authenticate a user.
-  The signInWithRedirect() function authenticates with Firebase using a sign-in redirect flow. 
-  The sign-in redirect flow involves redirecting the user to the identity provider service for authentication.
-  The signInWithPopup() function authenticates with Firebase using a pop-up window in which the user can sign in.
-  The GoogleAuthProvider object is used to configure the sign-in process with Google. 
-  */
   getAuth,
-  // eslint-disable-next-line no-unused-vars
   signInWithRedirect,
   signInWithPopup,
   GoogleAuthProvider,
@@ -19,126 +8,123 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-} from 'firebase/auth'
-
+} from 'firebase/auth';
 import {
-  getFirestore, // It is a function that will provide access to the Firestore database.
-  doc, // It is also a function to get the reference of a document in the collection.
-  getDoc, // This function fetches a specific document's data from the Cloud Firestore.
+  getFirestore,
+  doc,
+  getDoc,
   setDoc,
-  // eslint-disable-next-line no-unused-vars
-  Firestore, // This function is used to write or update a document in the Cloud Firestore database with new data.
-  collection, // collection() function provides reference to a Firestore collection.
-  writeBatch, // writeBatch() function is used to performs multiple writes on documents in the same collection.
-  query, // query(): This function creates a Query object for the specified collection or collection group.
-  getDocs, // getDocs(): This function retrieves all the documents that meet the conditions specified by the Query object.
-} from 'firebase/firestore'
+  collection,
+  writeBatch,
+  query,
+  getDocs,
+} from 'firebase/firestore';
 
-// web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyBBJTj7wkGcsDMwlUYkn0egw0P58F6EnoA',
-  authDomain: 'closet-rustic-kids-db.firebaseapp.com',
-  projectId: 'closet-rustic-kids-db',
-  storageBucket: 'closet-rustic-kids-db.appspot.com',
-  messagingSenderId: '906394988777',
-  appId: '1:906394988777:web:571e5df5390b2dbb03c078',
-}
+  apiKey: 'AIzaSyDDU4V-_QV3M8GyhC9SVieRTDM4dbiT0Yk',
+  authDomain: 'crwn-clothing-db-98d4d.firebaseapp.com',
+  projectId: 'crwn-clothing-db-98d4d',
+  storageBucket: 'crwn-clothing-db-98d4d.appspot.com',
+  messagingSenderId: '626766232035',
+  appId: '1:626766232035:web:506621582dab103a4d08d6',
+};
 
-// Initialize Firebase
-// eslint-disable-next-line no-unused-vars
-const firebaseApp = initializeApp(firebaseConfig)
+const firebaseApp = initializeApp(firebaseConfig);
 
-const googleProvider = new GoogleAuthProvider()
+const googleProvider = new GoogleAuthProvider();
+
 googleProvider.setCustomParameters({
   prompt: 'select_account',
-})
+});
 
-export const auth = getAuth()
-export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider)
+export const auth = getAuth();
+export const signInWithGooglePopup = () =>
+  signInWithPopup(auth, googleProvider);
 export const signInWithGoogleRedirect = () =>
-  signInWithRedirect(auth, googleProvider)
+  signInWithRedirect(auth, googleProvider);
 
-export const db = getFirestore()
+export const db = getFirestore();
 
-export async function addCollectionAndDocuments(collectionKey, objectsToAdd) {
-  // gets the collection of documents matching the collectionKey
-  const collectionRef = collection(db, collectionKey)
-  const batch = writeBatch(db)
+export const addCollectionAndDocuments = async (
+  collectionKey,
+  objectsToAdd,
+  field
+) => {
+  const collectionRef = collection(db, collectionKey);
+  const batch = writeBatch(db);
 
-  // objectsToAdd are the products on shopdata.js
   objectsToAdd.forEach((object) => {
-    const docRef = doc(collectionRef, object.title.toLowerCase())
-    batch.set(docRef, object)
-  })
+    const docRef = doc(collectionRef, object.title.toLowerCase());
+    batch.set(docRef, object);
+  });
 
-  await batch.commit()
-  console.log('bacth done')
-}
+  await batch.commit();
+  console.log('done');
+};
 
-export async function getCategoriesAndDocuments() {
-  const collectionRef = collection(db, 'categories')
-  const q = query(collectionRef)
+export const getCategoriesAndDocuments = async () => {
+  const collectionRef = collection(db, 'categories');
+  const q = query(collectionRef);
 
-  const querySnapshot = await getDocs(q)
-  return querySnapshot.docs.map(docSnapshot => docSnapshot.data())
-
- 
-
-}
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
+};
 
 export const createUserDocumentFromAuth = async (
   userAuth,
   additionalInformation = {}
 ) => {
-  /*The doc() function accepts three arguments:
-    1 A reference to the Firestore database instance (db)
-    2 A string indicating the collection in which the user document will be stored ('users')
-    3 A string that represents the ID of the user document, which is generated from the user's UID (userAuth.uid)*/
-  const userDocRef = doc(db, 'users', userAuth.uid)
-  console.log(userDocRef)
+  if (!userAuth) return;
 
-  const userSnapshot = await getDoc(userDocRef)
-  console.log(userSnapshot)
-  console.log(userSnapshot.exists())
+  const userDocRef = doc(db, 'users', userAuth.uid);
 
-  //This function checks if there is data in database
+  const userSnapshot = await getDoc(userDocRef);
+
   if (!userSnapshot.exists()) {
-    // If no data exists, a new date object is created
-    const createdAt = new Date()
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+
     try {
-      //A document with userAuth details and the current date is created in the database
       await setDoc(userDocRef, {
-        displayName: userAuth.displayName,
-        email: userAuth.email,
-        createdAt: createdAt,
+        displayName,
+        email,
+        createdAt,
         ...additionalInformation,
-      })
+      });
     } catch (error) {
-      //Any errors that occur during the creation of the new document will be logged to the console
-      console.log('error creating the user', error.message)
+      console.log('error creating the user', error.message);
     }
   }
 
-  return userDocRef
-}
+  return userSnapshot;
+};
 
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
-  if (!(email && password)) return
-  else return await createUserWithEmailAndPassword(auth, email, password)
-}
+  if (!email || !password) return;
 
-export function signInUserWithEmailAndPassword(email, password) {
-  return signInWithEmailAndPassword(auth, email, password)
-}
+  return await createUserWithEmailAndPassword(auth, email, password);
+};
 
-export async function signOutUser() {
-  await signOut(auth)
-}
+export const signInAuthUserWithEmailAndPassword = async (email, password) => {
+  if (!email || !password) return;
 
-export function onAuthStateChangedListener(callback) {
-  /* This code registers a callback function to be executed whenever the authentication state changes.
-  The 'auth' parameter is an object representing the current user's authentication status.
-  The 'callback' parameter is the function to be executed when the authentication state changes.
-  onAuthStateChanged passes the user as a parameter for the callback function */
-  onAuthStateChanged(auth, callback)
-}
+  return await signInWithEmailAndPassword(auth, email, password);
+};
+
+export const signOutUser = async () => await signOut(auth);
+
+export const onAuthStateChangedListener = (callback) =>
+  onAuthStateChanged(auth, callback);
+
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (userAuth) => {
+        unsubscribe();
+        resolve(userAuth);
+      },
+      reject
+    );
+  });
+};

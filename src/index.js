@@ -1,24 +1,29 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
-import { Provider } from 'react-redux'
-import App from './App'
-import { store } from './store/store'
-import { CartProvider } from './contexts/cart.context'
-import reportWebVitals from './reportWebVitals'
-import './index.scss'
+import React from "react";
+import { render } from "react-dom";
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { Elements } from "@stripe/react-stripe-js";
 
-const root = ReactDOM.createRoot(document.getElementById('root'))
-root.render(
+import App from "./App";
+import { store, persistor } from "./store/store";
+import { stripePromise } from "./utils/stripe/stripe.utils";
+
+import "./index.scss";
+
+const rootElement = document.getElementById("root");
+
+render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        <CartProvider>
-          <App />
-        </CartProvider>
-      </BrowserRouter>
+      <PersistGate loading={null} persistor={persistor}>
+        <BrowserRouter>
+          <Elements stripe={stripePromise}>
+            <App />
+          </Elements>
+        </BrowserRouter>
+      </PersistGate>
     </Provider>
-  </React.StrictMode>
-)
-
-reportWebVitals()
+  </React.StrictMode>,
+  rootElement
+);

@@ -1,53 +1,53 @@
-import React, { Fragment, useContext } from 'react'
-import { Outlet } from 'react-router-dom'
-import { ReactComponent as Logo } from '../../assets/crown.svg'
-import { useSelector } from 'react-redux'
-import CartIcon from '../../components/card-icon/card-icon.component'
-import CartDropdown from '../../components/cart-dropdown/cart-dropdown.component'
+import { Fragment } from 'react';
+import { Outlet } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { CartContext } from '../../contexts/cart.context'
-import { selectCurrentUser } from '../../store/user/user.selector'
+import CartIcon from '../../components/cart-icon/cart-icon.component';
+import CartDropdown from '../../components/cart-dropdown/cart-dropdown.component';
 
-import { signOutUser } from '../../utils/firebase/firebase.utils'
+import { selectIsCartOpen } from '../../store/cart/cart.selector';
+import { selectCurrentUser } from '../../store/user/user.selector';
+import { signOutStart } from '../../store/user/user.action';
+
+import { ReactComponent as CrwnLogo } from '../../assets/crown.svg';
 
 import {
-  LogoContainerStyle,
-  NavigationContainerStyle,
-  NavLinksStyle,
-  NavLinkStyle,
-} from './navigation.styles'
+  NavigationContainer,
+  NavLinks,
+  NavLink,
+  LogoContainer,
+} from './navigation.styles';
 
-function Navigation() {
-  const currentUser = useSelector(selectCurrentUser)
-  
-  const cartContext = useContext(CartContext)
+const Navigation = () => {
+  const dispatch = useDispatch();
+  const currentUser = useSelector(selectCurrentUser);
+  const isCartOpen = useSelector(selectIsCartOpen);
+
+  const signOutUser = () => dispatch(signOutStart());
 
   return (
     <Fragment>
-      <NavigationContainerStyle>
-        <LogoContainerStyle to='/'>
-          <Logo className='logo' />
-        </LogoContainerStyle>
-
-        <NavLinksStyle>
-          <NavLinkStyle to='/shop'>SHOP</NavLinkStyle>
+      <NavigationContainer>
+        <LogoContainer to='/'>
+          <CrwnLogo className='logo' />
+        </LogoContainer>
+        <NavLinks>
+          <NavLink to='/shop'>SHOP</NavLink>
 
           {currentUser ? (
-            <NavLinkStyle as='span' onClick={signOutUser}>
-              SIGN OUT ({currentUser.email})
-            </NavLinkStyle>
+            <NavLink as='span' onClick={signOutUser}>
+              SIGN OUT
+            </NavLink>
           ) : (
-            <NavLinkStyle to='/auth'>SIGN IN</NavLinkStyle>
+            <NavLink to='/auth'>SIGN IN</NavLink>
           )}
           <CartIcon />
-        </NavLinksStyle>
-        {cartContext.isCartOpen && <CartDropdown />}
-      </NavigationContainerStyle>
-      {/* The Outlet component is used here to render child routes. */}
-      {/* This element will be replaced with the appropriate route based on the current URL pathname. */}
+        </NavLinks>
+        {isCartOpen && <CartDropdown />}
+      </NavigationContainer>
       <Outlet />
     </Fragment>
-  )
-}
+  );
+};
 
-export default Navigation
+export default Navigation;
